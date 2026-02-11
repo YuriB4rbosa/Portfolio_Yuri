@@ -20,6 +20,13 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Dados das redes sociais para facilitar a manutenção
+  const socialLinks = [
+    { Icon: Github, href: "https://github.com/YuriB4rbosa" },
+    { Icon: Linkedin, href: "https://www.linkedin.com/in/yuri-horta-barbosa-386464295/" },
+    { Icon: Mail, href: "mailto:seu-email@exemplo.com" } // Adicione seu e-mail aqui
+  ];
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -35,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             Print("Yuri Barbosa")
           </motion.div>
@@ -55,24 +63,21 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-  <DarkToggle />
-  {[
-    { Icon: Github, href: "https://github.com/YuriB4rbosa" },
-    { Icon: Linkedin, href: "https://www.linkedin.com/in/yuri-horta-barbosa-386464295/" } 
-  ].map((social, index) => (
-    <motion.a
-      key={index}
-      whileHover={{ scale: 1.2, rotate: 5 }}
-      whileTap={{ scale: 0.9 }}
-      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      href={social.href}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <social.Icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-    </motion.a>
-  ))}
-</div>
+            <DarkToggle />
+            {socialLinks.slice(0, 2).map((social, index) => (
+              <motion.a
+                key={index}
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <social.Icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              </motion.a>
+            ))}
+          </div>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden space-x-4">
@@ -86,7 +91,6 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
           </div>
         </div>
 
-        
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -106,10 +110,21 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                     {item.label}
                   </a>
                 ))}
-                <div className="flex space-x-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-                   {[Github, Linkedin, Mail].map((Icon, index) => (
-                     <Icon key={index} className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                   ))}
+                
+                {/* ÍCONES MOBILE CORRIGIDOS: Agora envoltos em tags <a> */}
+                <div className="flex space-x-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                  {socialLinks.map((social, index) => (
+                    <a 
+                      key={index} 
+                      href={social.href} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-1" // Aumenta a área de clique
+                      onClick={(e) => e.stopPropagation()} 
+                    >
+                      <social.Icon className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-purple-600 transition-colors" />
+                    </a>
+                  ))}
                 </div>
               </div>
             </motion.div>
